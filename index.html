@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💖 Love Memory</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:"Segoe UI", sans-serif;
+    background: linear-gradient(-45deg,#ff9a9e,#fad0c4,#fbc2eb,#a18cd1);
+    background-size:400% 400%;
+    animation: bg 10s ease infinite;
+}
+
+@keyframes bg{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+/* 🎬 INTRO */
+#intro{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:black;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+    transition:1s;
+}
+
+#intro h1{
+    font-size:40px;
+    animation: glow 2s infinite;
+}
+
+@keyframes glow{
+    0%,100%{text-shadow:0 0 10px #ff4d6d;}
+    50%{text-shadow:0 0 30px #ff4d6d;}
+}
+
+/* 💌 CARD */
+.card{
+    width:90%;
+    max-width:650px;
+    background:rgba(255,255,255,0.92);
+    padding:30px;
+    border-radius:25px;
+    text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,0.3);
+    display:none;
+}
+
+.heart{
+    font-size:60px;
+    animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.2);}
+}
+
+.title{
+    font-size:28px;
+    color:#ff4d6d;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.days{
+    margin-top:15px;
+    font-size:18px;
+    color:#ff4d6d;
+    font-weight:bold;
+}
+
+/* 💬 STORY TEXT */
+.line{
+    margin-top:20px;
+    font-size:20px;
+    color:#444;
+    min-height:60px;
+    border-right:2px solid #ff4d6d;
+    white-space:pre-line;
+}
+
+/* 💌 BUTTON */
+.btn{
+    margin-top:20px;
+    padding:12px 25px;
+    border:none;
+    border-radius:30px;
+    background:#ff4d6d;
+    color:white;
+    cursor:pointer;
+    display:none;
+}
+
+/* 💖 HEART */
+.heart-float{
+    position:absolute;
+    bottom:-50px;
+    font-size:18px;
+    animation: rise linear forwards;
+}
+
+@keyframes rise{
+    from{transform:translateY(0);opacity:1;}
+    to{transform:translateY(-120vh);opacity:0;}
+}
+
+/* 📖 POPUP */
+.popup{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.7);
+    display:none;
+    justify-content:center;
+    align-items:center;
+}
+
+.popup-card{
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    max-width:420px;
+    animation: pop 0.4s ease;
+}
+
+@keyframes pop{
+    from{transform:scale(0);}
+    to{transform:scale(1);}
+}
+
+/* 🎵 */
+.musicBtn{
+    margin-top:10px;
+    padding:10px 15px;
+    border:none;
+    border-radius:20px;
+    background:#333;
+    color:white;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎬 INTRO -->
+<div id="intro">
+    <h1>💖 Loading Love Memory</h1>
+    <p>23/02/2024 ❤️ Forever</p>
+</div>
+
+<!-- 🎵 MUSIC -->
+<audio id="bgMusic" loop>
+    <source src="mot-doi.mp3" type="audio/mpeg">
+</audio>
+
+<!-- 💌 MAIN -->
+<div class="card">
+
+    <div class="heart">💖</div>
+
+    <div class="title">Yang ❤️ Ly</div>
+
+    <div class="days" id="days"></div>
+
+    <div class="line" id="line"></div>
+
+    <button class="musicBtn" onclick="playMusic()">🎵 Bật nhạc</button>
+
+    <button class="btn" id="btn" onclick="openPopup()">💌 Mở thư</button>
+
+</div>
+
+<!-- 📖 POPUP -->
+<div class="popup" id="popup">
+    <div class="popup-card">
+        <h2>💖 Thư gửi em</h2>
+        <p>
+            Từ 23/02/2024 đến hôm nay...<br><br>
+            Anh vẫn luôn chọn em ❤️<br><br>
+            Không cần hoàn hảo, chỉ cần là em 🥺
+        </p>
+        <br>
+        <button onclick="closePopup()">Đóng</button>
+    </div>
+</div>
+
+<script>
+
+const music=document.getElementById("bgMusic");
+
+/* 🎵 music */
+function playMusic(){
+    music.play();
+}
+
+/* 🎬 intro */
+setTimeout(()=>{
+    document.getElementById("intro").style.opacity="0";
+    setTimeout(()=>{
+        document.getElementById("intro").remove();
+        document.querySelector(".card").style.display="block";
+    },800);
+},2500);
+
+/* 📅 DAYS COUNT */
+const loveDate = new Date("2024-02-23");
+
+function updateDays(){
+    const now = new Date();
+    const diff = now - loveDate;
+    const days = Math.floor(diff/(1000*60*60*24));
+
+    document.getElementById("days").innerHTML =
+    "💞 " + days + " ngày yêu nhau kể từ 23/02/2024";
+}
+updateDays();
+
+/* 💬 STORY */
+const texts = [
+"Anh nhớ em mỗi ngày 🥺",
+"Từ 23/02/2024 đến bây giờ...",
+"Em là điều đẹp nhất ❤️",
+"Anh chỉ cần em thôi..."
+];
+
+let i=0;
+let el=document.getElementById("line");
+
+function story(){
+    if(i < texts.length){
+        el.innerHTML = texts[i];
+        i++;
+        setTimeout(story,2000);
+    }else{
+        document.getElementById("btn").style.display="inline-block";
+    }
+}
+
+setTimeout(story,3000);
+
+/* 💌 popup */
+function openPopup(){
+    document.getElementById("popup").style.display="flex";
+}
+function closePopup(){
+    document.getElementById("popup").style.display="none";
+}
+
+/* 💖 hearts */
+function heart(){
+    const h=document.createElement("div");
+    h.className="heart-float";
+    h.innerHTML="💖";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=(12+Math.random()*20)+"px";
+    h.style.animationDuration=(4+Math.random()*4)+"s";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),8000);
+}
+
+setInterval(heart,200);
+
+</script>
+
+</body>
+</html>
